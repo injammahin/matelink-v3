@@ -1,0 +1,2 @@
+import { Link } from 'react-router-dom'; import { Button } from '@/shared/components/ui/button';
+export default function DashboardPage(){return <div className="container-site py-16"><p className="eyebrow">Your account</p><h1 className="mt-5 text-4xl">Customer dashboard</h1><p className="body-copy mt-4">Your customer account area is ready for backend account data.</p><Button asChild className="mt-6"><Link to="/book">Request a clean</Link></Button></div>;}

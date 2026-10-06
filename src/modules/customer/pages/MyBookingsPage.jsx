@@ -1,0 +1,1 @@
+export default function MyBookingsPage(){return <div className="container-site py-16"><p className="eyebrow">Your account</p><h1 className="mt-5 text-4xl">My bookings</h1><p className="body-copy mt-4">Bookings linked to your authenticated account will appear here when the backend is connected.</p></div>;}

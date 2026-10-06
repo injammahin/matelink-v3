@@ -1,0 +1,1 @@
+export default function ProfilePage(){return <div className="container-site py-16"><p className="eyebrow">Your account</p><h1 className="mt-5 text-4xl">Profile</h1><p className="body-copy mt-4">Profile management is isolated here for the future backend integration.</p></div>;}
