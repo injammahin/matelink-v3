@@ -14,23 +14,476 @@ import { availableAddons } from '@/modules/booking/lib/pricing';
 const serviceIcons = { general: House, deep: Sparkles, 'move-in': House, 'end-of-lease': KeyRound };
 
 export function HomePage() {
-  return <>
-    <section className="container-site hero-grid">
-      <div className="hero-copy"><h1 className="hero-title">Sydney Home Cleaning</h1><p className="body-copy max-w-[470px]">From a much-needed refresh to a brand-new beginning, we help you care for the place you call home.</p><PostcodeCheck /><p className="mt-5 text-sm text-muted-foreground">Something a little different? <Link className="font-semibold text-navy underline underline-offset-4" to="/get-a-quote">Get a tailored quote</Link></p></div>
-      <div className="hero-image-wrap"><img src="/images/hero.webp" width="1900" height="1267" fetchPriority="high" alt="Light-filled living room with neutral sofas, timber furniture and indoor plants" /><div className="hero-image-tag"><div className="icon-square !h-11 !w-11"><Sparkles size={22} /></div><div><p className="text-sm font-semibold">For all of life’s fresh starts.</p><p className="mt-1 text-xs text-muted-foreground">Deep clean · Move in · Move out</p></div></div></div>
-    </section>
-    <FeatureStrip />
-    <section className="section-space "><div className="container-site"><div className="mb-12 flex flex-col justify-between gap-5 md:flex-row md:items-end"><div><p className="eyebrow mb-4">One home. Different moments.</p><h2 className="section-heading">The right clean,<br />right when you need it.</h2></div><p className="body-copy max-w-[360px] text-sm">Three considered services. One simple way to make your space feel good again.</p></div><div className="grid gap-6 md:grid-cols-3">{services.map(service => <article className="service-card overflow-hidden rounded-2xl bg-white" key={service.id}><Link to={`/${service.slug}`} tabIndex={-1} aria-hidden="true" className="block overflow-hidden"><img className="service-card-image" loading="lazy" src={service.image} width="1600" height="1067" alt={service.imageAlt} /></Link><div className="p-7"><p className="mb-3 text-xs font-semibold uppercase tracking-wider text-primary">{service.eyebrow}</p><h3 className="text-2xl">{service.name}</h3><p className="body-copy mt-4 text-sm">{service.cardText}</p><Link className="link-line mt-6" to={`/${service.slug}`}>Explore {service.name.toLowerCase()}</Link></div></article>)}</div></div></section>
-    <section className="section-space"><div className="container-site"><div className="mb-12"><p className="eyebrow mb-4">Less effort. More ease.</p><h2 className="section-heading">A fresh start in three steps.</h2></div><div className="process-grid">{[
-      ['01','Make it your clean','Choose your service, tell us about your home and add the extras you need.'],
-      ['02','Pick your preferred date','Send your request without paying upfront. We’ll review the details and confirm your clean personally.'],
-      ['03','Enjoy your space','We take care of the agreed clean. Your payment options stay available after the service.'],
-    ].map(([number,title,description])=><article key={number}><div className="process-number">{number}</div><h3 className="mb-4 text-xl">{title}</h3><p className="body-copy text-sm">{description}</p></article>)}</div></div></section>
-    <section className="section-space "><div className="container-site editorial-grid"><div className="service-photo !h-[460px]"><img src="/images/about.webp" width="1267" height="1900" loading="lazy" alt="Calm modern living room with timber furniture and soft curtains" /></div><div><p className="eyebrow mb-5">A thoughtful approach</p><h2 className="section-heading">Good cleaning starts<br />with understanding<br />your home.</h2><p className="body-copy mt-6">Every space is a little different. That’s why you choose the service and extras, and we confirm the details with you before your clean.</p><CheckList items={['Clear inclusions and considered extras','A simple request, with no customer account','Personal confirmation before we arrive']} /><Link className="link-line mt-7" to="/about">A little more about Matelink</Link></div></div></section>
-    <section className="section-space"><div className="container-site grid gap-12 md:grid-cols-[.85fr_1.15fr]"><div><p className="eyebrow mb-5">Good to know</p><h2 className="section-heading">A few questions,<br />taken care of.</h2><p className="body-copy mt-5 text-sm">The details that make your next clean a little easier.</p><Link className="link-line mt-5" to="/faq">All your questions, answered</Link></div><FAQList items={faqs.slice(0,5)} /></div></section>
-    <CTABand />
-  </>;
+  return (
+    <>
+      {/* =====================================================
+          HERO
+      ====================================================== */}
+      <section
+        id="home-hero"
+        className="container-site hero-grid scroll-mt-[110px]"
+      >
+        <div className="hero-copy">
+          <h1 className="hero-title">
+            Sydney Home Cleaning
+          </h1>
+
+          <p className="body-copy max-w-[470px]">
+            From a much-needed refresh to a brand-new beginning, we help
+            you care for the place you call home.
+          </p>
+
+          <PostcodeCheck />
+
+          <p className="mt-5 text-sm text-muted-foreground">
+            Something a little different?{' '}
+            <Link
+              className="font-semibold text-navy underline underline-offset-4"
+              to="/get-a-quote"
+            >
+              Get a tailored quote
+            </Link>
+          </p>
+        </div>
+
+        <div className="hero-image-wrap">
+          <img
+            src="/images/hero.webp"
+            width="1900"
+            height="1267"
+            fetchPriority="high"
+            alt="Light-filled living room with neutral sofas, timber furniture and indoor plants"
+          />
+
+          <div className="hero-image-tag">
+            <div className="icon-square !h-11 !w-11">
+              <Sparkles size={22} />
+            </div>
+
+            <div>
+              <p className="text-sm font-semibold">
+                For all of life’s fresh starts.
+              </p>
+
+              <p className="mt-1 text-xs text-muted-foreground">
+                Deep clean · Move in · Move out
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <FeatureStrip />
+
+{/* =====================================================
+    SERVICES
+    Mobile  : 1 column
+    Tablet  : 2 columns
+    Desktop : 4 columns
+====================================================== */}
+<section className="bg-[#f7f6f2] py-12 lg:py-14">
+  <div className="container-site">
+
+    {/* SECTION HEADING */}
+    <div
+      className="
+        mb-7
+        grid
+        gap-4
+        lg:grid-cols-[1fr_330px]
+        lg:items-end
+      "
+    >
+      <div>
+        <p className="eyebrow mb-3">
+          One home. Different moments.
+        </p>
+
+        <h2 className="section-heading">
+          The right clean,
+          <br />
+          right when you need it.
+        </h2>
+      </div>
+
+      <p
+        className="
+          body-copy
+          max-w-[330px]
+          text-sm
+          lg:justify-self-end
+        "
+      >
+        Four considered services. One simple way to make your
+        space feel good again.
+      </p>
+    </div>
+
+    {/* SERVICE CARDS */}
+    <div
+      className="
+        grid
+        grid-cols-1
+        gap-3
+
+        md:grid-cols-2
+        md:gap-4
+
+        lg:grid-cols-4
+        lg:gap-3
+      "
+    >
+      {services.map(service => {
+        const Icon =
+          serviceIcons[service.id] || Sparkles;
+
+        return (
+          <article
+            key={service.id}
+            className="
+              group
+              flex
+              h-full
+              min-w-0
+              flex-col
+              overflow-hidden
+
+              rounded-[18px]
+              border
+              border-[#dfe3e1]
+              bg-white
+
+              shadow-[0_6px_18px_rgba(16,45,67,0.035)]
+
+              transition-all
+              duration-300
+
+              hover:-translate-y-[2px]
+              hover:border-[#087e83]/25
+              hover:shadow-[0_14px_30px_rgba(16,45,67,0.075)]
+            "
+          >
+
+            {/* IMAGE */}
+            <Link
+              to={`/${service.slug}`}
+              tabIndex={-1}
+              aria-hidden="true"
+              className="
+                relative
+                block
+                h-[190px]
+                overflow-hidden
+                bg-[#edf1ef]
+
+                xl:h-[200px]
+              "
+            >
+              <img
+                src={service.image}
+                loading="lazy"
+                width="1600"
+                height="1067"
+                alt={service.imageAlt}
+                className="
+                  h-full
+                  w-full
+                  object-cover
+
+                  transition-transform
+                  duration-500
+                  ease-out
+
+                  group-hover:scale-[1.025]
+                "
+              />
+
+              {/* ICON */}
+              <div
+                className="
+                  absolute
+                  bottom-3
+                  left-3
+
+                  grid
+                  h-9
+                  w-9
+                  place-items-center
+
+                  rounded-full
+                  border
+                  border-white/80
+
+                  bg-white/95
+                  text-[#087e83]
+
+                  shadow-sm
+                  backdrop-blur
+                "
+              >
+                <Icon size={16} />
+              </div>
+            </Link>
+
+            {/* CONTENT */}
+            <div
+              className="
+                flex
+                flex-1
+                flex-col
+
+                px-4
+                pb-4
+                pt-4
+
+                xl:px-[18px]
+                xl:pb-[18px]
+              "
+            >
+
+              {/* EYEBROW */}
+              <p
+                className="
+                  text-[9px]
+                  font-bold
+                  uppercase
+                  tracking-[0.12em]
+                  text-[#087e83]
+                "
+              >
+                {service.eyebrow}
+              </p>
+
+              {/* TITLE */}
+              <h3
+                className="
+                  mt-2
+
+                  text-[17px]
+                  font-semibold
+                  leading-[1.25]
+                  tracking-[-0.035em]
+                  text-[#102d43]
+
+                  xl:text-[18px]
+                "
+              >
+                {service.name}
+              </h3>
+
+              {/* DESCRIPTION */}
+              <p
+                className="
+                  mt-2
+
+                  line-clamp-2
+                  min-h-[40px]
+
+                  text-[12.5px]
+                  leading-5
+                  text-muted-foreground
+                "
+              >
+                {service.cardText}
+              </p>
+
+              {/* CTA */}
+              <div className="mt-4">
+                <Link
+                  to={`/${service.slug}`}
+                  className="
+                    inline-flex
+                    items-center
+                    gap-1.5
+
+                    text-[12px]
+                    font-semibold
+                    text-[#102d43]
+
+                    transition-colors
+
+                    group-hover:text-[#087e83]
+                  "
+                >
+                  Explore {service.short || service.name}
+
+                  <MoveUpRight
+                    size={13}
+                    className="
+                      transition-transform
+                      duration-200
+
+                      group-hover:translate-x-0.5
+                      group-hover:-translate-y-0.5
+                    "
+                  />
+                </Link>
+
+                <div
+                  className="
+                    mt-1.5
+                    h-px
+                    w-8
+                    bg-[#102d43]
+
+                    transition-all
+                    duration-300
+
+                    group-hover:w-12
+                    group-hover:bg-[#087e83]
+                  "
+                />
+              </div>
+            </div>
+          </article>
+        );
+      })}
+    </div>
+  </div>
+</section>
+
+      {/* =====================================================
+          PROCESS
+      ====================================================== */}
+      <section className="section-space">
+        <div className="container-site">
+          <div className="mb-12">
+            <p className="eyebrow mb-4">
+              Less effort. More ease.
+            </p>
+
+            <h2 className="section-heading">
+              A fresh start in three steps.
+            </h2>
+          </div>
+
+          <div className="process-grid">
+            {[
+              [
+                '01',
+                'Make it your clean',
+                'Choose your service, tell us about your home and add the extras you need.',
+              ],
+              [
+                '02',
+                'Pick your preferred date',
+                'Send your request without paying upfront. We’ll review the details and confirm your clean personally.',
+              ],
+              [
+                '03',
+                'Enjoy your space',
+                'We take care of the agreed clean. Your payment options stay available after the service.',
+              ],
+            ].map(([number, title, description]) => (
+              <article key={number}>
+                <div className="process-number">
+                  {number}
+                </div>
+
+                <h3 className="mb-4 text-xl">
+                  {title}
+                </h3>
+
+                <p className="body-copy text-sm">
+                  {description}
+                </p>
+              </article>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* =====================================================
+          ABOUT / APPROACH
+      ====================================================== */}
+      <section className="section-space">
+        <div className="container-site editorial-grid">
+          <div className="service-photo !h-[460px]">
+            <img
+              src="/images/about.webp"
+              width="1267"
+              height="1900"
+              loading="lazy"
+              alt="Calm modern living room with timber furniture and soft curtains"
+            />
+          </div>
+
+          <div>
+            <p className="eyebrow mb-5">
+              A thoughtful approach
+            </p>
+
+            <h2 className="section-heading">
+              Good cleaning starts
+              <br />
+              with understanding
+              <br />
+              your home.
+            </h2>
+
+            <p className="body-copy mt-6">
+              Every space is a little different. That’s why you choose the
+              service and extras, and we confirm the details with you before
+              your clean.
+            </p>
+
+            <CheckList
+              items={[
+                'Clear inclusions and considered extras',
+                'A simple request, with no customer account',
+                'Personal confirmation before we arrive',
+              ]}
+            />
+
+            <Link
+              className="link-line mt-7"
+              to="/about"
+            >
+              A little more about Matelink
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* =====================================================
+          FAQ
+      ====================================================== */}
+      <section className="section-space">
+        <div className="container-site grid gap-12 md:grid-cols-[.85fr_1.15fr]">
+          <div>
+            <p className="eyebrow mb-5">
+              Good to know
+            </p>
+
+            <h2 className="section-heading">
+              A few questions,
+              <br />
+              taken care of.
+            </h2>
+
+            <p className="body-copy mt-5 text-sm">
+              The details that make your next clean a little easier.
+            </p>
+
+            <Link
+              className="link-line mt-5"
+              to="/faq"
+            >
+              All your questions, answered
+            </Link>
+          </div>
+
+          <FAQList
+            items={faqs.slice(0, 5)}
+          />
+        </div>
+      </section>
+
+      <CTABand />
+    </>
+  );
 }
+
 
 export function ServicePage({ serviceId }) {
   const service = services.find(s => s.id === serviceId);
