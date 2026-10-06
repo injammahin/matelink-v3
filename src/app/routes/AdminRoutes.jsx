@@ -24,6 +24,8 @@ import PromotionsPage from '@/modules/admin/pages/PromotionsPage';
 
 import SettingsPage from '@/modules/admin/pages/SettingsPage';
 
+import ServicePricingBuilderPage from '@/modules/admin/pages/ServicePricingBuilderPage';
+
 
 export default function AdminRoutes() {
   return (
@@ -73,12 +75,17 @@ export default function AdminRoutes() {
           }
         />
 
-        <Route
+        {/* <Route
           path="services"
           element={
             <ServicesPage />
           }
+        /> */}
+        <Route
+          path="services"
+          element={<ServicePricingBuilderPage />}
         />
+
 
         <Route
           path="pricing"
