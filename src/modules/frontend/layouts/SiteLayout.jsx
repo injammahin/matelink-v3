@@ -73,10 +73,94 @@ import {
 } from '@/shared/lib/promotions';
 
 export function Wordmark({ className = '' }) {
-  return <Link to="/" className={`wordmark ${className}`} aria-label="Matelink Cleaning home">
-    <img className="brand-mark" src="/images/favicon.png" alt="" width="43" height="43" />
-    <span className="wordmark-type">MATELINK<small>C L E A N I N G</small></span>
-  </Link>;
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  function handleLogoClick(event) {
+    event.preventDefault();
+
+    /*
+    |--------------------------------------------------------------------------
+    | ALREADY ON HOME PAGE
+    |--------------------------------------------------------------------------
+    */
+    if (location.pathname === '/') {
+      /*
+       * Update URL to the hero hash if needed.
+       */
+      if (location.hash !== '#home-hero') {
+        navigate('/#home-hero');
+
+        return;
+      }
+
+      /*
+       * URL is already /#home-hero.
+       *
+       * React Router will NOT trigger another navigation,
+       * therefore manually scroll to the hero.
+       */
+      const hero = document.getElementById('home-hero');
+
+      if (hero) {
+        hero.scrollIntoView({
+          behavior: 'smooth',
+          block: 'start',
+        });
+      } else {
+        /*
+         * Fallback just in case the hero element
+         * cannot be found.
+         */
+        window.scrollTo({
+          top: 0,
+          behavior: 'smooth',
+        });
+      }
+
+      return;
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | COMING FROM ANOTHER PAGE
+    |--------------------------------------------------------------------------
+    |
+    | Example:
+    | /contact
+    | /about
+    | /deep-cleaning
+    |
+    | SiteLayout's hash effect will scroll after Home renders.
+    |
+    */
+    navigate('/#home-hero');
+  }
+
+  return (
+    <Link
+      to="/#home-hero"
+      onClick={handleLogoClick}
+      className={`wordmark ${className}`}
+      aria-label="Matelink Cleaning home"
+    >
+      <img
+        className="brand-mark"
+        src="/images/favicon.png"
+        alt=""
+        width="43"
+        height="43"
+      />
+
+      <span className="wordmark-type">
+        MATELINK
+
+        <small>
+          C L E A N I N G
+        </small>
+      </span>
+    </Link>
+  );
 }
 
 export function AnnouncementBar() {
@@ -1204,16 +1288,54 @@ export function Footer() {
   );
 }
 export default function SiteLayout() {
+  const location = useLocation();
+
+  useEffect(() => {
+    if (!location.hash) {
+      return;
+    }
+
+    const timer = window.setTimeout(() => {
+      const element = document.querySelector(
+        location.hash
+      );
+
+      if (!element) {
+        return;
+      }
+
+      element.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start',
+      });
+    }, 50);
+
+    return () => {
+      window.clearTimeout(timer);
+    };
+  }, [
+    location.pathname,
+    location.hash,
+  ]);
+
   return (
     <>
       <a
         href="#main-content"
-        className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:rounded-lg focus:bg-white focus:p-3"
+        className="
+          sr-only
+          focus:not-sr-only
+          focus:fixed
+          focus:left-4
+          focus:top-4
+          focus:z-[100]
+          focus:rounded-lg
+          focus:bg-white
+          focus:p-3
+        "
       >
         Skip to content
       </a>
-
-      <AnnouncementBar />
 
       <Header />
 
