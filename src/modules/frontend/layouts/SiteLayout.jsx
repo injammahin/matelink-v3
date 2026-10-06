@@ -610,7 +610,7 @@ export function Header() {
               />
 
               <span className="header-user-name">
-                Account
+            
               </span>
 
               {user && (
